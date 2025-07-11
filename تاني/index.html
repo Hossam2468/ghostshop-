@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>شحن فري فاير</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background-color: #1a1a1a;
+      padding: 25px 30px;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 15px #00d8ff;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #00d8ff;
+    }
+    label {
+      display: block;
+      margin: 10px 0 6px 0;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: right;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #00d8ff;
+      color: #000;
+      font-weight: bold;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #009ec2;
+      color: #fff;
+    }
+    .error {
+      color: #ff4c4c;
+      margin-bottom: 10px;
+      display: none;
+    }
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+      cursor: pointer;
+      line-height: 60px;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
+    .whatsapp-float:hover {
+      background-color: #1ebe57;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>شحن جواهر فري فاير</h1>
+    <div id="error" class="error"></div>
+    <form id="chargeForm">
+      <label for="uid">🎮 UID اللاعب:</label>
+      <input type="text" id="uid" name="uid" placeholder="مثال: 123456789" required />
+
+      <label for="diamonds">💎 اختر عدد الجواهر:</label>
+      <select id="diamonds" name="diamonds" required>
+        <option value="" disabled selected>اختر الباقة</option>
+        <option value="100">100 جوهرة - 15 جنيه</option>
+        <option value="310">310 جواهر - 40 جنيه</option>
+        <option value="520">520 جوهرة - 65 جنيه</option>
+        <option value="1060">1060 جوهرة - 120 جنيه</option>
+        <option value="2180">2180 جوهرة - 230 جنيه</option>
+      </select>
+
+      <label for="payment">💰 وسيلة الدفع:</label>
+      <select id="payment" name="payment" required>
+        <option value="" disabled selected>اختر طريقة الدفع</option>
+        <option value="vodafone">فودافون كاش</option>
+        <option value="paypal">PayPal</option>
+        <option value="mada">بطاقة مدى</option>
+        <option value="cod">الدفع عند الاستلام</option>
+      </select>
+
+      <button type="submit">🚀 تأكيد الشحن</button>
+    </form>
+  </div>
+
+  <!-- زر واتساب العائم -->
+  <a href="https://wa.me/201129942898" target="_blank" 
+     class="whatsapp-float" aria-label="تواصل عبر واتساب">
+    &#x1F4AC;
+  </a>
+
+  <script>
+    const form = document.getElementById('chargeForm');
+    const errorDiv = document.getElementById('error');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      errorDiv.style.display = 'none';
+      const uid = form.uid.value.trim();
+      const diamonds = form.diamonds.value;
+      const payment = form.payment.value;
+
+      const uidRegex = /^[0-9]{6,12}$/;
+      if (!uidRegex.test(uid)) {
+        showError('الرجاء إدخال UID صحيح (6 إلى 12 رقم).');
+        return;
+      }
+
+      if (!diamonds) {
+        showError('الرجاء اختيار عدد الجواهر.');
+        return;
+      }
+
+      if (!payment) {
+        showError('الرجاء اختيار طريقة الدفع.');
+        return;
+      }
+
+      // حفظ البيانات مؤقتا بالlocalStorage
+      const orderData = {
+        uid,
+        diamonds,
+        payment
+      };
+      localStorage.setItem('ffOrder', JSON.stringify(orderData));
+
+      // تحويل لصفحة تأكيد الطلب
+      window.location.href = 'confirmation.html';
+    });
+
+    function showError(msg) {
+      errorDiv.textContent = msg;
+      errorDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
